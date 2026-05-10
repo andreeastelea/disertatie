@@ -1,0 +1,51 @@
+# Docker Compose – SQL variant (PostgreSQL)
+# Usage:  docker compose -f docker-compose.sql.yml up --build
+
+services:
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      DB_TYPE: sql
+      DATABASE_URL: postgresql://perfuser:perfpass@db:5432/perfdb
+      SECRET_KEY: change-me-in-production
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: perfuser
+      POSTGRES_PASSWORD: perfpass
+      POSTGRES_DB: perfdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U perfuser -d perfdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,0 +1,42 @@
+# Docker Compose – NoSQL variant (MongoDB)
+# Usage:  docker compose -f docker-compose.nosql.yml up --build
+
+services:
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      DB_TYPE: nosql
+      MONGO_URI: mongodb://db:27017/
+      MONGO_DB_NAME: perfdb
+      SECRET_KEY: change-me-in-production
+    depends_on:
+      - db
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  db:
+    image: mongo:7.0
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo_data:

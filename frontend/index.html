@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benchmark App – Disertație Flask</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Studiu Comparativ de Performanță – Aplicație Flask MVC</h1>
+    <p id="db-badge" class="badge">Detectare DB...</p>
+  </header>
+
+  <main class="container">
+
+    <!-- ── FORM SECTION ─────────────────────────────────────────── -->
+    <section class="card">
+      <h2>Trimite Date (CPU-bound + scriere DB)</h2>
+      <form id="submitForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Nume *</label>
+            <input type="text" id="name" name="name" required placeholder="ex: Popescu" />
+          </div>
+          <div class="form-group">
+            <label for="surname">Prenume *</label>
+            <input type="text" id="surname" name="surname" required placeholder="ex: Ion" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="code">Cod *</label>
+            <input type="text" id="code" name="code" required placeholder="ex: ABC123" />
+          </div>
+          <div class="form-group">
+            <label for="value">Valoare Numerică *</label>
+            <input type="number" id="value" name="value" required step="any" placeholder="ex: 42.5" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descriere</label>
+          <textarea id="description" name="description" rows="3" placeholder="Opțional..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Trimite &amp; Calculează</button>
+      </form>
+
+      <div id="submitResult" class="result-box hidden"></div>
+    </section>
+
+    <!-- ── BENCHMARK SECTION ─────────────────────────────────────── -->
+    <section class="card">
+      <h2>Benchmark Manual</h2>
+      <p class="hint">Apasă un buton pentru a trimite un singur request de test.</p>
+
+      <div class="bench-controls">
+        <div class="bench-group">
+          <label>Valoare CPU:</label>
+          <input type="number" id="cpuValue" value="42" step="any" style="width:80px" />
+          <button class="btn btn-secondary" onclick="runBenchmarkCpu()">Test CPU-bound</button>
+        </div>
+        <div class="bench-group">
+          <label>Nr. inserări I/O:</label>
+          <input type="number" id="ioCount" value="10" min="1" max="500" style="width:70px" />
+          <button class="btn btn-secondary" onclick="runBenchmarkIo()">Test I/O-bound</button>
+        </div>
+      </div>
+
+      <div id="benchResult" class="result-box hidden"></div>
+    </section>
+
+    <!-- ── RECORDS SECTION ───────────────────────────────────────── -->
+    <section class="card">
+      <h2>Înregistrări Recente <span class="hint">(ultimele 50)</span></h2>
+      <button class="btn btn-info" onclick="loadRecords()">Reîncarcă</button>
+      <div id="recordsContainer" class="table-wrapper"></div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Disertație – Studiu comparativ Flask: Bare Metal / VM / Docker &middot; SQL vs NoSQL</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
