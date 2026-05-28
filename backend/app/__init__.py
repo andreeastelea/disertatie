@@ -16,6 +16,8 @@ def create_app() -> Flask:
     if db_type == "sql":
         db.init_app(app)
         with app.app_context():
+            from app import models  # Ensure SQLAlchemy model metadata is registered
+
             db.create_all()
     else:
         import pymongo

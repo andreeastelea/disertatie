@@ -84,10 +84,35 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+# Optional: Folosește fișiere .env
+Copy `backend/.env.example` to `backend/.env` to configure backend variables. You can either set `DATABASE_URL` directly, or set the PostgreSQL credential fields below:
+
+```env
+DB_TYPE=sql
+DATABASE_URL=
+DB_USER=perfuser
+DB_PASSWORD=perfpass
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=perfdb
+```
+
+For MongoDB mode use:
+
+```env
+DB_TYPE=nosql
+MONGO_URI=mongodb://localhost:27017/
+MONGO_DB_NAME=perfdb
+```
+
+Copy `frontend/.env.example` to `frontend/.env` to override the frontend API base URL when serving static files directly.
+
 **Varianta SQL (PostgreSQL)**
 
 ```bash
 createdb -U postgres perfdb
+# Grant the SQL user rights to create tables in the public schema
+psql -U postgres -d perfdb -c "GRANT CREATE ON SCHEMA public TO perfuser;"
 
 export DB_TYPE=sql
 export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/perfdb"
@@ -97,6 +122,7 @@ gunicorn --config gunicorn.conf.py run:app
 **Varianta NoSQL (MongoDB)**
 
 ```bash
+sudo systemctl start mongod
 export DB_TYPE=nosql
 export MONGO_URI="mongodb://localhost:27017/"
 export MONGO_DB_NAME=perfdb
@@ -109,7 +135,8 @@ Servește frontend-ul:
 cd frontend && python3 -m http.server 8080
 ```
 
-> Ajustează `API_BASE` din `frontend/static/app.js` la `http://localhost:5000/api` pentru rulare bare-metal fără nginx.
+> Dacă frontend-ul rulează pe `8080` și backend-ul pe `5000`, nu este nevoie să editezi `frontend/static/app.js`.
+> Poți folosi `frontend/.env` pentru a suprascrie `API_BASE` dacă este necesar.
 
 ---
 
@@ -152,6 +179,7 @@ htop              # utilizare generală
 | `DATABASE_URL` | `postgresql://perfuser:perfpass@localhost:5432/perfdb` | URI conexiune PostgreSQL |
 | `MONGO_URI` | `mongodb://localhost:27017/` | URI conexiune MongoDB |
 | `MONGO_DB_NAME` | `perfdb` | Numele bazei de date MongoDB |
+| `BACKEND_PORT` | `5000` | Portul pe care rulează backend-ul Flask/Gunicorn |
 | `SECRET_KEY` | `dev-secret-key-change-in-prod` | Cheie secretă Flask |
 
 ---

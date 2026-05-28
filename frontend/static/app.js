@@ -1,5 +1,57 @@
 /* global state */
-const API_BASE = "/api";
+let API_BASE = "/api";
+
+/* ── Env loader ────────────────────────────────────────────────── */
+
+function parseEnvText(text) {
+  const env = {};
+  for (const rawLine of text.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!line || line.startsWith("#")) continue;
+    const idx = line.indexOf("=");
+    if (idx < 0) continue;
+    const key = line.slice(0, idx).trim();
+    let value = line.slice(idx + 1).trim();
+    if ((value.startsWith("\"") && value.endsWith("\"")) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    env[key] = value;
+  }
+  return env;
+}
+
+async function loadFrontendEnv() {
+  try {
+    const resp = await fetch("/.env", { cache: "no-store" });
+    if (!resp.ok) return;
+    const env = parseEnvText(await resp.text());
+    if (env.API_BASE) {
+      API_BASE = env.API_BASE;
+    }
+  } catch {
+    // Ignore missing or unreadable env file.
+  }
+}
+
+function resolveApiBase() {
+  if (API_BASE && API_BASE !== "/api") {
+    return API_BASE;
+  }
+
+  const host = window.location.hostname;
+  const port = window.location.port;
+
+  if ((host === "localhost" || host === "127.0.0.1") && port === "8080") {
+    return "http://localhost:5000/api";
+  }
+
+  return "/api";
+}
+
+async function initAppConfig() {
+  await loadFrontendEnv();
+  API_BASE = resolveApiBase();
+}
 
 /* ── Utility ─────────────────────────────────────────────────── */
 
@@ -161,5 +213,8 @@ async function loadRecords() {
 }
 
 /* ── Init ────────────────────────────────────────────────────── */
-initBadge();
-loadRecords();
+(async () => {
+  await initAppConfig();
+  initBadge();
+  loadRecords();
+})();

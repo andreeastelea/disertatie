@@ -1,0 +1,88 @@
+
+═══════════════════════════════════════════════════════
+  Flask Performance Benchmark – Thu 28 May 2026 10:44:32 PM EEST
+═══════════════════════════════════════════════════════
+  Target: http://localhost:5000
+  Requesturi per test: 500
+  Niveluri de concurență: 10 50 100 200
+
+═══════════════════════════════════════════════════════
+  Health Check
+═══════════════════════════════════════════════════════
+  {"db_type":"sql","status":"ok"}
+
+═══════════════════════════════════════════════════════
+  CPU-BOUND BENCHMARK  (/api/benchmark/cpu?value=42)
+═══════════════════════════════════════════════════════
+
+  Concurență: 10 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/cpu?value=42
+    Failed requests:        0
+    Requests per second:    359.06 [#/sec] (mean)
+      50%     28
+      95%     38
+      99%     53
+
+  Concurență: 50 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/cpu?value=42
+    Failed requests:        0
+    Requests per second:    386.21 [#/sec] (mean)
+      50%    111
+      95%    204
+      99%    261
+
+  Concurență: 100 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/cpu?value=42
+    Failed requests:        0
+    Requests per second:    380.17 [#/sec] (mean)
+      50%    240
+      95%    332
+      99%    359
+
+  Concurență: 200 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/cpu?value=42
+    Failed requests:        0
+    Requests per second:    359.26 [#/sec] (mean)
+      50%    499
+      95%    633
+      99%    672
+
+═══════════════════════════════════════════════════════
+  I/O-BOUND BENCHMARK  (/api/benchmark/io?count=5)
+═══════════════════════════════════════════════════════
+
+  Concurență: 10 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/io?count=5
+    Failed requests:        0
+    Requests per second:    952.47 [#/sec] (mean)
+      50%      9
+      95%     20
+      99%     25
+
+  Concurență: 50 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/io?count=5
+    Failed requests:        0
+    Requests per second:    1324.79 [#/sec] (mean)
+      50%     32
+      95%     62
+      99%    111
+
+  Concurență: 100 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/io?count=5
+    Failed requests:        0
+    Requests per second:    1482.55 [#/sec] (mean)
+      50%     58
+      95%     87
+      99%     97
+
+  Concurență: 200 | Total requesturi: 500
+  URL: http://localhost:5000/api/benchmark/io?count=5
+    Failed requests:        0
+    Requests per second:    1332.76 [#/sec] (mean)
+      50%    125
+      95%    174
+      99%    195
+
+═══════════════════════════════════════════════════════
+  Benchmark finalizat – rezultate salvate în ./results/benchmark_20260528_224432.txt
+═══════════════════════════════════════════════════════

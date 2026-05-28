@@ -7,7 +7,7 @@
 #   ./run_benchmark.sh [HOST] [PORT]
 #
 # Examples:
-#   ./run_benchmark.sh                  # defaults: localhost:80
+#   ./run_benchmark.sh                  # defaults: localhost:5000
 #   ./run_benchmark.sh 192.168.1.10 80
 #
 # Requirements:
@@ -18,7 +18,7 @@
 set -euo pipefail
 
 HOST="${1:-localhost}"
-PORT="${2:-80}"
+PORT="${2:-5000}"
 BASE_URL="http://${HOST}:${PORT}"
 
 TOTAL_REQUESTS=500

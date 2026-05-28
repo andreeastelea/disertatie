@@ -1,7 +1,9 @@
 # Gunicorn production configuration
 import multiprocessing
+import os
 
-bind = "0.0.0.0:5000"
+backend_port = os.environ.get("BACKEND_PORT", "5000")
+bind = f"0.0.0.0:{backend_port}"
 
 # 2 workers per CPU core is a common starting point for mixed workloads
 workers = multiprocessing.cpu_count() * 2 + 1
